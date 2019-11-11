@@ -128,8 +128,8 @@ object Stats {
     def sample: T
   }
 
-  case class MultiNormal[N <: Dim](n: N, mu: Vector[N], sigma: Matrix[N, N]) extends Sampleable[Vector[N]] {
-    private val L: Matrix[N, N] = (sigma + Matrix.identity[N](n)*0.000001).cholesky
+  case class MultiNormal[N <: Dim](n: N, mu: Vector[N], sigma: Matrix[N, N], epsilon: Double = 0.000001) extends Sampleable[Vector[N]] {
+    private val L: Matrix[N, N] = (sigma + Matrix.identity[N](n)*epsilon).cholesky
     def sample: Vector[N] = L * MultiNormal.randVec[N](n) + mu
   }
   object MultiNormal {
