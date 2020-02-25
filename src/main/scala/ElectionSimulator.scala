@@ -16,14 +16,14 @@ object ElectionSimulator {
                     ): Map[District, Map[Poll, Double]] =
     districts.map { d =>
       (d, d.pollTags.flatMap { case (reg, weight) =>
-        polls.filter(_.tag == reg).map(p => (p, p.weight*weight)) })
+            polls.filter(_.tag == reg).map(p => (p, p.weight*weight)) })
     }.toMap
 
   def calculateDistrib(polls: Map[Poll, Double], candidates: Seq[Candidate])
                       (n: Int = candidates.size): MultiNormal[n.type] =
     MultiNormal.fromSamplesWeighted(n,
       polls.map { case (p: Poll, w) => (
-        Vector(n, candidates.map(p.results.getOrElse(_, 0))).stochastic,
+          Vector(n, candidates.map(p.results.getOrElse(_, 0))).stochastic,
         w) }.toSeq
     )
 
